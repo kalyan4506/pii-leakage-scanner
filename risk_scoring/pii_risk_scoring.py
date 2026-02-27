@@ -136,3 +136,12 @@ def score_pii_findings(
         "explanation": explanation,
     }
 
+
+def calculate_risk_score(items: Iterable[Mapping[str, Any]]) -> float:
+    """
+    Convenience wrapper that returns only the numeric risk score for a list of
+    PII-like items.
+    """
+    result = score_pii_findings(items)
+    return float(result["score"])
+

@@ -17,7 +17,7 @@ from dataclasses import dataclass
 from typing import Dict, Iterable, Literal, Mapping, MutableMapping, Optional, Sequence, TypedDict
 import json
 
-from pii_detector import PiiDict, PiiType
+from pii_detection.pii_detector import PiiDict, PiiType
 
 
 RiskLevel = Literal["low", "medium", "high", "critical"]
@@ -145,4 +145,26 @@ def classify_pii_dicts(
     """
     validate_policy(policy)
     return [classify_pii_dict(x, policy=policy) for x in items]
+
+
+def classify_pii(items: Sequence[PiiDict], *, policy: Mapping[PiiType, PiiRiskProfile] = DEFAULT_POLICY) -> str:
+    """
+    Convenience helper that returns an overall categorical risk level for a set
+    of PII items.
+
+    The highest risk level of any item (according to the policy) wins.
+    """
+    if not items:
+        return "low"
+
+    order: list[RiskLevel] = ["low", "medium", "high", "critical"]
+    highest: RiskLevel = "low"
+
+    for item in items:
+        profile = policy[item["type"]]
+        _validate_profile(item["type"], profile)
+        if order.index(profile.risk_level) > order.index(highest):
+            highest = profile.risk_level
+
+    return highest
 

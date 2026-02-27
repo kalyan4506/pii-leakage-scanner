@@ -16,8 +16,8 @@ from dataclasses import dataclass
 from typing import Iterable, Literal, Optional, Sequence, TypedDict
 import re
 
-from file_scanner import LineRecord
-from pii_detector import PiiDict, PiiType
+from pii_detection.file_scanner import LineRecord
+from pii_detection.pii_detector import PiiDict, PiiType
 
 
 Verdict = Literal["real", "dummy", "uncertain"]
@@ -206,3 +206,22 @@ def validate_detected_pii_with_spacy(
 
     return out
 
+
+def validate_with_spacy(text: str, *, model: str = "en_core_web_sm"):
+    """
+    Lightweight helper for validating raw text with spaCy.
+
+    This is a simplified API intended primarily for tests and demo usage:
+    it runs spaCy NER over the input text and returns a list of dictionaries
+    with entity text and labels. When text is empty, an empty list is
+    returned.
+    """
+    if not text:
+        return []
+
+    nlp = _get_default_nlp(model=model)
+    doc = nlp(text)
+    results: list[dict] = []
+    for ent in getattr(doc, "ents", ()):
+        results.append({"text": ent.text, "label": ent.label_})
+    return results

@@ -7,6 +7,9 @@ Detects (line-by-line):
 - Aadhaar-like numbers (12 digits, commonly grouped as 4-4-4)
 
 Returns structured matches with: type, value, file, line number.
+
+If adding logging, use utils.log_sanitize.sanitize_for_log() on any structure
+containing PII so that raw values are never written to logs.
 """
 
 from __future__ import annotations
@@ -15,7 +18,7 @@ from dataclasses import dataclass
 from typing import Iterable, Iterator, Literal, Sequence, TypedDict
 import re
 
-from file_scanner import LineRecord, PathLike, scan_paths
+from .file_scanner import LineRecord, PathLike, scan_paths
 
 
 PiiType = Literal["email", "phone", "aadhaar"]

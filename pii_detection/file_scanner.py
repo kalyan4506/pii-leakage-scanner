@@ -134,3 +134,13 @@ def scan_bytes(
         else:
             yield LineRecord(filename=filename, line_number=i, line=line.rstrip("\r\n"))
 
+
+def scan_file(file_path: str, *, encoding: str = "utf-8", errors: str = "replace") -> str:
+    """
+    Convenience helper to read the full contents of a text file as a string.
+
+    Primarily used in tests or simple scenarios where callers want the entire
+    file content rather than line-by-line iteration.
+    """
+    p = Path(file_path)
+    return p.read_text(encoding=encoding, errors=errors)
