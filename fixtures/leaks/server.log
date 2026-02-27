@@ -1,4 +1,0 @@
-2026-02-27T14:03:11.221Z INFO  request_id=req_7f2a auth=ok user=alice.smith@example.com ip=198.51.100.44
-2026-02-27T14:03:11.402Z WARN  request_id=req_7f2a pii_export=true reason="support-debug"
-2026-02-27T14:03:11.403Z INFO  request_id=req_7f2a profile name="Alice Smith" dob="1992-04-17" phone="+1 (555) 014-2233" ssn="000-12-3456"
-2026-02-27T14:03:12.019Z ERROR request_id=req_7f2a payment failed card="4111 1111 1111 1111" exp="12/29" cvc="123"
